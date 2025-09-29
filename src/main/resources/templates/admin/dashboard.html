@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::content}, ~{::scripts})}">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Welcome Section -->
+        <div class="row mb-4" data-aos="fade-up">
+            <div class="col-12">
+                <div class="card glass-effect">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2 class="mb-2 fw-bold text-white">Welcome back, Admin Officer!</h2>
+                                <p class="text-white-50 mb-0">Here's what's happening with your Vehicle Insurance system today.</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <div class="me-3">
+                                        <div class="text-white-50 small">Current Time</div>
+                                        <div class="text-white fw-bold current-time">12:00:00</div>
+                                    </div>
+                                    <div class="stats-icon bg-white bg-opacity-20">
+                                        <i class="bi bi-clock text-white"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card card-stats h-100">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="card-title text-uppercase text-muted mb-2 fw-bold">Total Users</h6>
+                                <h2 class="mb-0 fw-bold text-primary" th:text="${statistics.totalUsers}">0</h2>
+                                <small class="text-success">
+                                    <i class="bi bi-arrow-up"></i> 12% from last month
+                                </small>
+                            </div>
+                            <div class="col-auto">
+                                <div class="stats-icon bg-primary">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card card-stats success h-100">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="card-title text-uppercase text-muted mb-2 fw-bold">Active Users</h6>
+                                <h2 class="mb-0 fw-bold text-success" th:text="${statistics.activeUsers}">0</h2>
+                                <small class="text-success">
+                                    <i class="bi bi-arrow-up"></i> 8% from last month
+                                </small>
+                            </div>
+                            <div class="col-auto">
+                                <div class="stats-icon bg-success">
+                                    <i class="bi bi-person-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="card card-stats warning h-100">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="card-title text-uppercase text-muted mb-2 fw-bold">Blocked Users</h6>
+                                <h2 class="mb-0 fw-bold text-warning" th:text="${statistics.blockedUsers}">0</h2>
+                                <small class="text-warning">
+                                    <i class="bi bi-arrow-down"></i> 3% from last month
+                                </small>
+                            </div>
+                            <div class="col-auto">
+                                <div class="stats-icon bg-warning">
+                                    <i class="bi bi-person-x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="card card-stats danger h-100">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="card-title text-uppercase text-muted mb-2 fw-bold">Pending Users</h6>
+                                <h2 class="mb-0 fw-bold text-danger" th:text="${statistics.pendingUsers}">0</h2>
+                                <small class="text-danger">
+                                    <i class="bi bi-arrow-up"></i> 5% from last month
+                                </small>
+                            </div>
+                            <div class="col-auto">
+                                <div class="stats-icon bg-danger">
+                                    <i class="bi bi-person-dash"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row mb-4">
+            <div class="col-xl-8 col-lg-7" data-aos="fade-right">
+                <div class="card h-100">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0 fw-bold">User Activity Overview</h5>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-period="7d">7 Days</button>
+                                <button type="button" class="btn btn-outline-primary" data-period="30d">30 Days</button>
+                                <button type="button" class="btn btn-outline-primary" data-period="90d">90 Days</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-5" data-aos="fade-left">
+                <div class="card h-100">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <h5 class="card-title mb-0 fw-bold">Users by Role</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="roleChart"></canvas>
+                        </div>
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                                    <span class="small">Admin Officer</span>
+                                </div>
+                                <span class="small fw-bold">5</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-info rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                                    <span class="small">Policy Officer</span>
+                                </div>
+                                <span class="small fw-bold">10</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-warning rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                                    <span class="small">Claims Officer</span>
+                                </div>
+                                <span class="small fw-bold">8</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-success rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                                    <span class="small">Customer Service</span>
+                                </div>
+                                <span class="small fw-bold">15</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activities & System Health -->
+        <div class="row mb-4">
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="500">
+                <div class="card h-100">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0 fw-bold">Recent Activities</h5>
+                            <a href="/admin/activities" class="btn btn-sm btn-outline-primary">View All</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-list">
+                            <div class="activity-item d-flex align-items-center mb-3" th:each="activity : ${statistics.recentActivities}">
+                                <div class="activity-avatar me-3">
+                                    <div class="avatar-sm bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-person text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="activity-content flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1 fw-bold" th:text="${activity.username}">username</h6>
+                                            <p class="mb-0 text-muted small" th:text="${activity.activityDescription}">activity description</p>
+                                        </div>
+                                        <div class="text-end">
+                                            <span th:if="${activity.success}" class="badge bg-success">Success</span>
+                                            <span th:unless="${activity.success}" class="badge bg-danger">Failed</span>
+                                            <div class="text-muted small mt-1" th:text="${#temporals.format(activity.activityTimestamp, 'HH:mm')}">time</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="600">
+                <div class="card h-100">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <h5 class="card-title mb-0 fw-bold">System Health</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <div class="display-6 fw-bold text-success" th:text="${statistics.totalActivities}">0</div>
+                                    <div class="text-muted small">Total Activities</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <div class="display-6 fw-bold text-info" th:text="${statistics.activitiesLast24Hours}">0</div>
+                                    <div class="text-muted small">Last 24 Hours</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <div class="display-6 fw-bold text-warning" th:text="${statistics.activitiesLast7Days}">0</div>
+                                    <div class="text-muted small">Last 7 Days</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <div class="display-6 fw-bold text-primary" th:text="${statistics.totalConfigurations}">0</div>
+                                    <div class="text-muted small">Configurations</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- System Status -->
+                        <div class="mt-4">
+                            <h6 class="fw-bold mb-3">System Status</h6>
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="bg-success rounded-circle me-2" style="width: 8px; height: 8px;"></div>
+                                <span class="small">Database Connection</span>
+                                <span class="ms-auto small text-success fw-bold">Healthy</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="bg-success rounded-circle me-2" style="width: 8px; height: 8px;"></div>
+                                <span class="small">Application Server</span>
+                                <span class="ms-auto small text-success fw-bold">Running</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-warning rounded-circle me-2" style="width: 8px; height: 8px;"></div>
+                                <span class="small">Memory Usage</span>
+                                <span class="ms-auto small text-warning fw-bold">75%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions & Notifications -->
+        <div class="row">
+            <div class="col-lg-8" data-aos="fade-up" data-aos-delay="700">
+                <div class="card">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <h5 class="card-title mb-0 fw-bold">Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3 col-sm-6">
+                                <a href="/admin/users/create" class="btn btn-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                                    <i class="bi bi-person-plus-fill fs-2 mb-2"></i>
+                                    <span class="fw-bold">Create User</span>
+                                </a>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <a href="/admin/users" class="btn btn-info w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                                    <i class="bi bi-people-fill fs-2 mb-2"></i>
+                                    <span class="fw-bold">Manage Users</span>
+                                </a>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <a href="/admin/activities" class="btn btn-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                                    <i class="bi bi-activity fs-2 mb-2"></i>
+                                    <span class="fw-bold">View Activities</span>
+                                </a>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <a href="/admin/reports" class="btn btn-success w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                                    <i class="bi bi-graph-up fs-2 mb-2"></i>
+                                    <span class="fw-bold">Generate Reports</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="800">
+                <div class="card">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <h5 class="card-title mb-0 fw-bold">Notifications</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="notification-list">
+                            <div class="notification-item d-flex align-items-start mb-3">
+                                <div class="notification-icon me-3">
+                                    <div class="bg-warning bg-opacity-10 rounded-circle p-2">
+                                        <i class="bi bi-exclamation-triangle text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="notification-content">
+                                    <h6 class="mb-1 fw-bold">System Update Available</h6>
+                                    <p class="mb-0 text-muted small">A new version is ready for installation</p>
+                                    <div class="text-muted small">2 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="notification-item d-flex align-items-start mb-3">
+                                <div class="notification-icon me-3">
+                                    <div class="bg-info bg-opacity-10 rounded-circle p-2">
+                                        <i class="bi bi-info-circle text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="notification-content">
+                                    <h6 class="mb-1 fw-bold">New User Registration</h6>
+                                    <p class="mb-0 text-muted small">John Doe has registered for approval</p>
+                                    <div class="text-muted small">4 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="notification-item d-flex align-items-start">
+                                <div class="notification-icon me-3">
+                                    <div class="bg-success bg-opacity-10 rounded-circle p-2">
+                                        <i class="bi bi-check-circle text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="notification-content">
+                                    <h6 class="mb-1 fw-bold">Backup Completed</h6>
+                                    <p class="mb-0 text-muted small">Daily backup has been completed successfully</p>
+                                    <div class="text-muted small">1 day ago</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="scripts">
+        <script>
+            // Modern Activity Chart with gradient
+            const activityCtx = document.getElementById('activityChart').getContext('2d');
+            const gradient = activityCtx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(37, 99, 235, 0.3)');
+            gradient.addColorStop(1, 'rgba(37, 99, 235, 0.05)');
+
+            const activityChart = new Chart(activityCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'User Activities',
+                        data: [12, 19, 3, 5, 2, 3, 9],
+                        borderColor: '#2563eb',
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#2563eb',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#64748b'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#f1f5f9'
+                            },
+                            ticks: {
+                                color: '#64748b'
+                            }
+                        }
+                    },
+                    elements: {
+                        point: {
+                            hoverBackgroundColor: '#2563eb'
+                        }
+                    }
+                }
+            });
+
+            // Modern Role Chart with custom styling
+            const roleCtx = document.getElementById('roleChart').getContext('2d');
+            const roleChart = new Chart(roleCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Admin Officer', 'Policy Officer', 'Claims Officer', 'Customer Service'],
+                    datasets: [{
+                        data: [5, 10, 8, 15],
+                        backgroundColor: [
+                            '#2563eb',
+                            '#06b6d4',
+                            '#f59e0b',
+                            '#10b981'
+                        ],
+                        borderWidth: 0,
+                        cutout: '60%'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Chart period switching
+            $('[data-period]').click(function() {
+                $('[data-period]').removeClass('active');
+                $(this).addClass('active');
+                
+                const period = $(this).data('period');
+                // Here you would typically fetch new data based on the period
+                console.log('Switching to period:', period);
+            });
+
+            // Real-time data updates (simulation)
+            setInterval(function() {
+                // Simulate real-time data updates
+                const now = new Date();
+                const timeString = now.toLocaleTimeString();
+                $('.current-time').text(timeString);
+            }, 1000);
+
+            // Animate counters
+            function animateCounter(element, target) {
+                let current = 0;
+                const increment = target / 100;
+                const timer = setInterval(function() {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    element.text(Math.floor(current));
+                }, 20);
+            }
+
+            // Animate statistics on page load
+            $(document).ready(function() {
+                $('.card-stats h2').each(function() {
+                    const target = parseInt($(this).text());
+                    if (!isNaN(target)) {
+                        $(this).text('0');
+                        animateCounter($(this), target);
+                    }
+                });
+            });
+
+            // Add hover effects to cards
+            $('.card').hover(
+                function() {
+                    $(this).addClass('shadow-lg');
+                },
+                function() {
+                    $(this).removeClass('shadow-lg');
+                }
+            );
+
+            // Initialize tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
+
+            // Smooth scrolling for anchor links
+            $('a[href^="#"]').on('click', function(event) {
+                var target = $(this.getAttribute('href'));
+                if( target.length ) {
+                    event.preventDefault();
+                    $('html, body').stop().animate({
+                        scrollTop: target.offset().top - 100
+                    }, 1000);
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>
+
