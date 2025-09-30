@@ -24,7 +24,8 @@ public class AdministratorApplication {
      * Application ready event listener
      */
     @EventListener(ApplicationReadyEvent.class)
-    public void onApplicationReady(Environment environment) {
+    public void onApplicationReady(ApplicationReadyEvent event) {
+        Environment environment = event.getApplicationContext().getEnvironment();
         log.info(" Vehicle Insurance Administrator Application Started Successfully!");
         log.info(" Application Name: {}", environment.getProperty("spring.application.name"));
         log.info(" Server Port: {}", environment.getProperty("server.port"));
@@ -34,7 +35,7 @@ public class AdministratorApplication {
         log.info("   - Login: http://localhost:8080/login");
         log.info("   - Dashboard: http://localhost:8080/admin/dashboard");
         log.info("   - Health Check: http://localhost:8080/actuator/health");
-        
+
         // Log active profiles
         String[] activeProfiles = environment.getActiveProfiles();
         if (activeProfiles.length == 0) {
